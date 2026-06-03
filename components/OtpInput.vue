@@ -13,7 +13,7 @@ const emit = defineEmits<{
 const inputRefs = ref<(HTMLInputElement | null)[]>([]);
 const localValue = computed(() => {
   const arr = [...props.modelValue];
-  while (arr.length < 6) arr.push('');
+  while (arr.length < 4) arr.push('');
   return arr;
 });
 
@@ -23,13 +23,13 @@ function updateDigit(index: number, value: string) {
   newValue[index] = digit;
   emit('update:modelValue', newValue);
 
-  if (digit && index < 5) {
+  if (digit && index < 3) {
     nextTick(() => {
       inputRefs.value[index + 1]?.focus();
     });
   }
 
-  if (newValue.every((v) => v !== '') && newValue.length === 6) {
+  if (newValue.every((v) => v !== '') && newValue.length === 4) {
     emit('complete');
   }
 }
@@ -55,12 +55,12 @@ function onKeyDown(index: number, event: KeyboardEvent) {
 function onPaste(event: ClipboardEvent) {
   event.preventDefault();
   const pasted = event.clipboardData?.getData('text') || '';
-  const digits = pasted.replace(/\D/g, '').split('').slice(0, 6);
+  const digits = pasted.replace(/\D/g, '').split('').slice(0, 4);
   const newValue = [...digits];
-  while (newValue.length < 6) newValue.push('');
+  while (newValue.length < 4) newValue.push('');
   emit('update:modelValue', newValue);
 
-  if (digits.length === 6) {
+  if (digits.length === 4) {
     emit('complete');
   }
 }
@@ -72,7 +72,7 @@ function focusInput(index: number) {
 watch(
   () => props.modelValue,
   (val) => {
-    if (val.length === 6 && val.every((v) => v !== '')) {
+    if (val.length === 4 && val.every((v) => v !== '')) {
       emit('complete');
     }
   },
@@ -83,7 +83,7 @@ watch(
 <template>
   <div class="flex justify-center gap-3">
     <div
-      v-for="(digit, index) in 6"
+      v-for="(digit, index) in 4"
       :key="index"
       class="flex h-14 w-11 items-center justify-center rounded-xl border-2 text-center text-2xl font-bold transition-colors"
       :class="

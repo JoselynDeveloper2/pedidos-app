@@ -2,10 +2,10 @@
 import { useAuthStore } from '~/stores/auth';
 
 const auth = useAuthStore();
-const otpCode = ref<string[]>(['', '', '', '', '', '']);
+const otpCode = ref<string[]>(['', '', '', '']);
 const loading = ref(false);
 const errorMessage = ref('');
-const countdown = ref(25);
+const countdown = ref(120);
 const canResend = computed(() => countdown.value === 0);
 
 // Redirect if no phone
@@ -20,7 +20,7 @@ onMounted(() => {
 let timer: ReturnType<typeof setInterval> | null = null;
 
 function startCountdown() {
-  countdown.value = 25;
+  countdown.value = 120;
   if (timer) clearInterval(timer);
   timer = setInterval(() => {
     countdown.value--;
@@ -57,8 +57,8 @@ async function verifyCode() {
   errorMessage.value = '';
   const code = otpCode.value.join('');
 
-  if (code.length !== 6) {
-    errorMessage.value = 'Ingresa los 6 dígitos del código';
+  if (code.length !== 4) {
+    errorMessage.value = 'Ingresa los 4 dígitos del código';
     return;
   }
 
@@ -80,7 +80,7 @@ async function verifyCode() {
     }
   } catch (error: any) {
     errorMessage.value = error.statusMessage || 'Código incorrecto';
-    otpCode.value = ['', '', '', '', '', ''];
+    otpCode.value = ['', '', '', ''];
   } finally {
     loading.value = false;
   }
@@ -107,7 +107,7 @@ function onKeypadPress(key: string | 'backspace') {
   }
 }
 
-const isComplete = computed(() => otpCode.value.length === 6 && otpCode.value.every((v) => v !== ''));
+const isComplete = computed(() => otpCode.value.length === 4 && otpCode.value.every((v) => v !== ''));
 </script>
 
 <template>

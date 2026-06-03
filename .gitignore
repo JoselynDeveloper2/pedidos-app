@@ -1,0 +1,21 @@
+# Environment variables
+.env
+
+# Dependencies
+node_modules
+
+# Nuxt
+.nuxt
+.output
+dist
+
+# Local Netlify folder
+.netlify
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
